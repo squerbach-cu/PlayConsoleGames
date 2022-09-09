@@ -1,4 +1,4 @@
-﻿namespace TowersOfHanoi
+﻿namespace PlayConsoleGames
 {
     public interface IPlayGamesService
     {
