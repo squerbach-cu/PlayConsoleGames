@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PlayConsoleGames.PlayTowersOfHanoi
 {
-    public class PlayTowersOfHanoiService : IPlayGamesService
+    public class PlayTowersOfHanoiService : IGame
     {
         public void PlayGames()
         {
@@ -178,6 +178,31 @@ namespace PlayConsoleGames.PlayTowersOfHanoi
                 }
             }
             return i;
+        }
+
+        public void PrintGame()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandleInput()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasEnded()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandleInput(ConsoleKeyInfo consoleKeyInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InitGame()
+        {
+            throw new NotImplementedException();
         }
     }
 }

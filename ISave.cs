@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlayConsoleGames.Tools
+namespace PlayConsoleGames
 {
-    internal class Safegame
+    internal interface ISave
     {
+        void SaveToMedium();
+        void LoadToMedium();
     }
 }

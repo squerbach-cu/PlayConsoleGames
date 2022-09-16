@@ -17,7 +17,7 @@ namespace PlayConsoleGames.TicTacToe
             int winCount = 3;
             int countToNine = 1;           
             
-
+            WinValidation winValidation = new WinValidation();
 
             for (int i = 0; i < 3; i++)
             {
@@ -35,7 +35,7 @@ namespace PlayConsoleGames.TicTacToe
                             PutXO(board, activePlayerChar);
                         } 
 
-                        if (WinValidation.CheckWin(board, activePlayerChar, j, i, winCount))
+                        if (winValidation.CheckWin(board, activePlayerChar, j, i, winCount))
                         {
                             return activePlayerChar; 
                         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PlayConsoleGames.Connect4;
 
 namespace PlayConsoleGames.Tools
 {
@@ -19,7 +20,17 @@ namespace PlayConsoleGames.Tools
             return false;
         }
 
-        public static bool CheckWin(char[,] c4array, char activePlayerChar, int dropColumn, int dropRow, int winningNumber )
+        /// <summary>
+        /// Checks if someone connected the amount of chars set in the winningNumber int
+        /// the tokens hae to align in a horizontal, diagonal or vertical way
+        /// </summary>
+        /// <param name="c4array"></param>
+        /// <param name="activePlayerChar"></param>
+        /// <param name="dropColumn"></param>
+        /// <param name="dropRow"></param>
+        /// <param name="winningNumber"></param>
+        /// <returns></returns>
+        public bool CheckWin(char[,] c4array, char activePlayerChar, int dropColumn, int dropRow, int winningNumber )
         {
             int currentColumn = dropColumn;
             int currentRow = dropRow;

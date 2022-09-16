@@ -7,8 +7,23 @@ using System.Threading.Tasks;
 
 namespace PlayConsoleGames.TicTacToe
 {
-    internal class PlayTicTacToeService : IPlayGamesService
+    internal class PlayTicTacToeService : IGame
     {
+        public void HandleInput(ConsoleKeyInfo consoleKeyInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasEnded()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InitGame()
+        {
+            throw new NotImplementedException();
+        }
+
         //Gameplay Loop
         public void PlayGames()
         {
@@ -58,6 +73,11 @@ namespace PlayConsoleGames.TicTacToe
             }
 
             
+        }
+
+        public void PrintGame()
+        {
+            throw new NotImplementedException();
         }
     }   
 }

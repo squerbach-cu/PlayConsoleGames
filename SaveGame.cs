@@ -6,22 +6,32 @@ using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace PlayConsoleGames.PlayTowersOfHanoi
+namespace PlayConsoleGames
 {
-    internal class SaveGame
+    internal class SaveGame : ISave
     {
-        private static void SafeToJson(SaveGame boardToSafe)
+        public void SaveToMedium(SaveGame boardToSafe)
         {
             var boardJson = JsonConvert.SerializeObject(boardToSafe);
             File.WriteAllText(@"C:\TFS\CodingPractice\" + "Safegame.json", boardJson);
             var dir = Environment.CurrentDirectory;
         }
 
-        private static void LoadFromJson(SaveGame boardToLoadJsonInto)
+        public void LoadToMedium(SaveGame boardToLoadJsonInto)
         {
             string boardStringFromJson = File.ReadAllText(@"C:\TFS\CodingPractice\Safegame.json");
 
             boardToLoadJsonInto = JsonConvert.DeserializeObject<SaveGame>(boardStringFromJson);
+        }
+
+        public void SaveToMedium()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadToMedium()
+        {
+            throw new NotImplementedException();
         }
     }
 }
