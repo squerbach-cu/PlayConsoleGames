@@ -110,6 +110,7 @@ namespace PlayConsoleGames.Connect4
             PlayerOne.IsActive = !PlayerOne.IsActive;
             PlayerTwo.IsActive = !PlayerTwo.IsActive;
         }
+
     }
 
 }

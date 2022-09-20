@@ -5,33 +5,68 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
+using PlayConsoleGames.Connect4;
 
 namespace PlayConsoleGames
 {
-    internal class SaveGame : ISave
+    public class SaveGame : ISave
     {
-        public void SaveToMedium(SaveGame boardToSafe)
+        public void SaveToMedium(object objectToSerialize)
         {
-            var boardJson = JsonConvert.SerializeObject(boardToSafe);
-            File.WriteAllText(@"C:\TFS\CodingPractice\" + "Safegame.json", boardJson);
-            var dir = Environment.CurrentDirectory;
+            var type = objectToSerialize.GetType();
+            string typeString = JsonConvert.SerializeObject(type);
+            string jsonString = JsonConvert.SerializeObject(objectToSerialize);
+            string base64encoded = Base64Encode(jsonString);
+            string base64encodedType = Base64Encode(typeString);            
+
+            //concatenate the 2 strings:
+            string stringToSave = base64encodedType + ";" + base64encoded;
+
+            var dir = Environment.CurrentDirectory;            
+            File.WriteAllText(dir + "\\Savegame.json", stringToSave);             
         }
 
-        public void LoadToMedium(SaveGame boardToLoadJsonInto)
+        public object LoadFromMedium()
         {
-            string boardStringFromJson = File.ReadAllText(@"C:\TFS\CodingPractice\Safegame.json");
+            //Get the file to load from
+            var dir = Environment.CurrentDirectory; 
+            string fileName = dir + "\\Savegame.json";
+            string fileContent = File.ReadAllText(fileName); 
+            //get the "prefix" aka the type of the object
+            string objectName = String.Concat(fileContent.TakeWhile(c => c != ';'));
+            string decodedType = Base64Decode(objectName);
+            //get the  part and decode it 
+            string base64Substring = fileContent.Substring(fileContent.LastIndexOf(';') + 1);
+            string decodedSaveFile = Base64Decode(base64Substring);
 
-            boardToLoadJsonInto = JsonConvert.DeserializeObject<SaveGame>(boardStringFromJson);
+
+            var type = JsonConvert.DeserializeObject<Type>(decodedType);
+            var saveGame3 = JsonConvert.DeserializeObject<object>(decodedSaveFile);
+
+
+
+            var typedfg = Convert.ChangeType(saveGame3, type);
+            var typedfg = (type)saveGame3;
+            //var saveGame = JsonConvert.DeserializeObject<object>(decodedType);
+
+            //File.Delete(fileName);
+            return typedfg;
+        }
+        private static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
 
-        public void SaveToMedium()
+        private static string Base64Decode(string base64EncodedData)
         {
-            throw new NotImplementedException();
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
-        public void LoadToMedium()
+        private static void PrefixPlusBase64String()
         {
-            throw new NotImplementedException();
+                        
         }
     }
 }

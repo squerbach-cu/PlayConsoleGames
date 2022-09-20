@@ -3,6 +3,7 @@ using PlayConsoleGames.PlayTowersOfHanoi;
 using PlayConsoleGames.TicTacToe;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,7 +17,12 @@ namespace PlayConsoleGames
     {
         public void run()
         {
-            ISave save = new SaveGame();
+            ISave load = new SaveGame();
+            var dir = Environment.CurrentDirectory;
+            if (File.Exists(dir + "\\Savegame.json"))
+            {
+                load.LoadFromMedium();
+            }
 
             #region advanced stuff
             //var gametypes = AppDomain.CurrentDomain.GetAssemblies()

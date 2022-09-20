@@ -89,7 +89,9 @@ namespace PlayConsoleGames.Connect4
             {
                 if (consoleKeyInfo.KeyChar == 's')
                 {
-                    //SafeTheGame();
+                    SaveGame saveGame = new SaveGame();
+                    saveGame.SaveToMedium(_gameState);
+                    saveGame.LoadFromMedium();
                 }
             }
             if (char.IsDigit(consoleKeyInfo.KeyChar))

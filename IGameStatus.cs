@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace PlayConsoleGames
 {
-    internal interface ISave
+    internal interface IGameStatus
     {
-        void SaveToMedium(Object objectToSerialize);
-        Object LoadFromMedium();
     }
 }
