@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PlayConsoleGames.TicTacToe
 {
-    public class Board
+    public class GameStatusTicTacToe
     {
-        public Board()
+        public GameStatusTicTacToe()
         {
             Array = new char[3, 3];
             int k = 1;

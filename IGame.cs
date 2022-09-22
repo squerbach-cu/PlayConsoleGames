@@ -11,6 +11,7 @@ namespace PlayConsoleGames
         void PrintGame();
         void HandleInput(ConsoleKeyInfo consoleKeyInfo);
         void InitGame();
-        bool HasEnded();        
+        bool HasEnded();
+        void InitGame(object saveGame);
     }
 }

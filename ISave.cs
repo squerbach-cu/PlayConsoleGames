@@ -10,5 +10,6 @@ namespace PlayConsoleGames
     {
         void SaveToMedium(Object objectToSerialize);
         Object LoadFromMedium();
+        int GetGameIndex();
     }
 }

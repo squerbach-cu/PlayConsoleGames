@@ -2,27 +2,28 @@
 using PlayConsoleGames.PlayTowersOfHanoi;
 using PlayConsoleGames.TicTacToe;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace PlayConsoleGames
 {
-    //Soll eigentlich Singelton sein = Nur eine Instanz darf geschaffen werden.
-    //also quasi Static (:
     internal class GameEngine
     {
         public void run()
         {
             ISave load = new SaveGame();
+            IGame game;
+            bool loadedGame = false;
+            int gameIndex = 0;
+
             var dir = Environment.CurrentDirectory;
             if (File.Exists(dir + "\\Savegame.json"))
             {
-                load.LoadFromMedium();
+                gameIndex = load.GetGameIndex();
+                loadedGame = true;
             }
+
+
 
             #region advanced stuff
             //var gametypes = AppDomain.CurrentDomain.GetAssemblies()
@@ -40,13 +41,13 @@ namespace PlayConsoleGames
             //IGame game = (IGame)Activator.CreateInstance(gametypes[gameIndex - 1]);
             #endregion
 
-            //welches spiel soll gespielt werden
-            Console.WriteLine("Towers of Hanoi(1), Connect Four(2), TicTacToe(3)");
-            Console.Write("What game do you want to play?: ");
-            //input validator muss noch gebaut werden 
-            int gameIndex = Convert.ToInt32(Console.ReadLine());
-
-            IGame game;
+            if (!loadedGame)
+            {
+                //welches spiel soll gespielt werden
+                Console.WriteLine("Towers of Hanoi(1), Connect Four(2), TicTacToe(3)");
+                Console.Write("What game do you want to play?: ");
+                gameIndex = Convert.ToInt32(Console.ReadLine());                 
+            }            
 
             switch (gameIndex)
             {
@@ -67,7 +68,14 @@ namespace PlayConsoleGames
                     return;
             }
 
-            game.InitGame();            
+            if (loadedGame)
+            {
+                game.InitGame(load.LoadFromMedium());
+            }
+            else
+            {
+                game.InitGame();
+            }        
 
             while (true)
             {

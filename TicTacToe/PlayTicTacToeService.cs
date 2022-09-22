@@ -24,10 +24,15 @@ namespace PlayConsoleGames.TicTacToe
             throw new NotImplementedException();
         }
 
+        public void InitGame(object saveGame)
+        {
+            throw new NotImplementedException();
+        }
+
         //Gameplay Loop
         public void PlayGames()
         {
-            Board board = new Board();
+            GameStatusTicTacToe board = new GameStatusTicTacToe();
             IBoardPrinter printer = new CollorfullStaticBoardPrinter();
             GameLogic gameLogic = new GameLogic();
             printer.PrintBoard(board.Array);            

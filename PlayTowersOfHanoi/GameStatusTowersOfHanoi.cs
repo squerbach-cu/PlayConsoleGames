@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PlayConsoleGames.PlayTowersOfHanoi
 {
-    internal class GameStatus
+    internal class GameStatusTowersOfHanoi
     {
         public int[,] TowersOfHanoiBoard { get; set; }
         public int removedDisk { get; set; }

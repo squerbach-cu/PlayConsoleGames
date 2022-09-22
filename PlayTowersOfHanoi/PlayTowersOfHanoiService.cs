@@ -204,5 +204,10 @@ namespace PlayConsoleGames.PlayTowersOfHanoi
         {
             throw new NotImplementedException();
         }
+
+        public void InitGame(object saveGame)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

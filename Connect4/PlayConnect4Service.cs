@@ -1,4 +1,5 @@
-﻿using PlayConsoleGames.Tools;
+﻿using Newtonsoft.Json.Linq;
+using PlayConsoleGames.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,16 +72,24 @@ namespace PlayConsoleGames.Connect4
             }
         }
 
+        public void InitGame(object saveGame)
+        {
+            var test = (JObject)saveGame;
+            var test2 = test.ToObject<GameStatusC4>();
+            _gameState = test2;
+            _gameState.StateHasChanged = true;
+        }
+
         public void InitGame()
         {
-            _gameState = new GameStatusC4();
+            _gameState = new GameStatusC4();            
 
             Console.Write("Enter name of player ONE: ");
             _gameState.PlayerOne.Name = Console.ReadLine();
-            
+
 
             Console.Write("Enter name of player TWO: ");
-            _gameState.PlayerTwo.Name = Console.ReadLine();  
+            _gameState.PlayerTwo.Name = Console.ReadLine();
         }
 
         public void HandleInput(ConsoleKeyInfo consoleKeyInfo)
@@ -91,7 +100,8 @@ namespace PlayConsoleGames.Connect4
                 {
                     SaveGame saveGame = new SaveGame();
                     saveGame.SaveToMedium(_gameState);
-                    saveGame.LoadFromMedium();
+                    Console.WriteLine("Game has been saved!");
+                    Environment.Exit(0);
                 }
             }
             if (char.IsDigit(consoleKeyInfo.KeyChar))
