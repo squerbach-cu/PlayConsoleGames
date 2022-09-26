@@ -28,7 +28,6 @@
                     outputString = diskBroadnessVisual2 + outputString + diskBroadnessVisual2;
                 }
             }
-
             return outputString;
         }
     }

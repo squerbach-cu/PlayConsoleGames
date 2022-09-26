@@ -1,213 +1,167 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace PlayConsoleGames.PlayTowersOfHanoi
 {
     public class PlayTowersOfHanoiService : IGame
     {
-        public void PlayGames()
-        {
-            Console.Write("Amount: ");
-            int amountDisks = Convert.ToInt32(Console.ReadLine());
-            int[,] currentDiskPlacement = GenerateBoard(amountDisks);
-
-
-            Console.Write("Print upside down?(1) or normal(2)? ");
-            int upsideDown = Convert.ToInt32(Console.ReadLine());
-
-            Console.Write("Print Star(1) or Bang(2)");
-            DiskDisplayType starOrBang = (DiskDisplayType)Convert.ToInt32(Console.ReadLine());
-
-            IPrintDiskService print2 = new PrintDiskBangService();
-            IPrintBoardService print;
-            if (starOrBang == DiskDisplayType.Star)
-            {
-                print2 = new PrintDiskStarService();
-            }
-
-            if (upsideDown == 2)
-            {
-                print = new PrintBoardNormalService(print2);
-            }
-            else
-            {
-                print = new PrintBoardReverseService(print2);
-            }
-                       
-
-            print.PrintBoard(currentDiskPlacement);
-
-
-
-            while (notWon(currentDiskPlacement))
-            {
-                Console.Clear();
-                print.PrintBoard(currentDiskPlacement);
-
-                int towerIndex;
-                do
-                {
-                    Console.Write("Take form stack 1/2/3: ");
-                    towerIndex = InputValidation(Console.ReadLine());
-                } while (takeDisk(currentDiskPlacement, towerIndex));
-
-                Console.Clear();
-                print.PrintBoard(currentDiskPlacement);
-
-                int towerIndex2;
-                do
-                {
-                    Console.Write("Put onto stack 1/2/3?: ");
-                    towerIndex2 = InputValidation(Console.ReadLine());
-                } while (dropDisk(currentDiskPlacement, removedDisk, towerIndex2));
-            }
-
-            Console.WriteLine("You win!");                
-        }
-
-        private static int removedDisk { get; set; }
-
-        //takes a disk and returns bool if it was successful
-        private static bool takeDisk(int[,] board, int towerIndex)
-        {
-            int counter;            
-
-            if (board[towerIndex, counter = NextDisk(board, towerIndex)] == 0)
-            {
-                return true;                
-            }
-
-            int removedDiskValue = board[towerIndex, NextDisk(board, towerIndex)];
-            board[towerIndex, NextDisk(board, towerIndex)] = 0;
-            removedDisk = removedDiskValue;
-            return false;
-        }
-
-        //Drops disk and returns bool whether its alowed or not
-        private static bool dropDisk(int[,] board, int diskValue, int towerIndex)
-        {
-            if (NextFreeSlot(board, towerIndex) != board.GetLength(1) - 1)
-            {
-                while (diskValue > board[towerIndex, NextFreeSlot(board, towerIndex) + 1])
-                {
-                    return true;
-                }
-            }
-            board[towerIndex, NextFreeSlot(board, towerIndex)] = diskValue;
-            return false;
-        }
-
-        private static int[,] GenerateBoard(int diskAmount)
-        {
-            int[,] diskArray = new int[3, diskAmount];
-
-            for (int i = 0; i < diskArray.GetLength(1); i++)
-            {
-                diskArray[0, i] = i + 1;
-
-            }
-            return diskArray;
-        }
-
-
-
-        private static int InputValidation(string input)
-        {
-            int returnnumber = 0;
-
-            while (returnnumber <= 0)
-            {
-                
-                bool erfolg = int.TryParse(input, out returnnumber);
-                if (erfolg)
-                {
-                    if (returnnumber >= 1 && returnnumber <= 3)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Only 1,2 or 3 are valid inputs");
-                        input = Console.ReadLine();
-                        returnnumber = 0;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Only 1,2 or 3 are valid inputs");
-                    input = Console.ReadLine();
-                }
-            }
-
-
-
-            return returnnumber - 1;
-        }
-
-
-
-        private static bool notWon(int[,] spielfeld)
-        {
-            return spielfeld[2, 0] == 0;
-        }
-
-        private static int NextFreeSlot(int[,] arrayToCheck, int towerIndex)
-        {
-            int i;
-            for (i = arrayToCheck.GetLength(1) - 1; i >= 0; i--)
-            {
-                if (arrayToCheck[towerIndex, i] == 0)
-                {
-                    break;
-                }
-            }
-            return i;
-        }
-
-        private static int NextDisk(int[,] arrayToCheck, int towerIndex)
-        {
-            int i;
-            for (i = 0; i < arrayToCheck.GetLength(1) - 1; i++)
-            {
-                if (arrayToCheck[towerIndex, i] != 0)
-                {
-                    break;
-                }
-            }
-            return i;
-        }
-
-        public void PrintGame()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void HandleInput()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool HasEnded()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void HandleInput(ConsoleKeyInfo consoleKeyInfo)
-        {
-            throw new NotImplementedException();
-        }
-
+        private GameStatusTowersOfHanoi _gameState;
         public void InitGame()
         {
-            throw new NotImplementedException();
+            Console.Write("Disk amount: ");
+            int diskAmount = Convert.ToInt32(Console.ReadLine());
+
+            _gameState = new GameStatusTowersOfHanoi(diskAmount);
+            _gameState.DiskAmount = diskAmount;
+
+            Console.Write("Print the towers normal(1) or upside down?(2)? ");
+            _gameState.UpsideDown = Convert.ToInt32(Console.ReadLine());
+
+            Console.Write("Print the towers with stars(1) or bangs(2)? ");
+            _gameState.StarOrBang = Convert.ToInt32(Console.ReadLine());
+
+            InitPrinter();
+        }
+
+        private void InitPrinter()
+        {
+            DiskDisplayType starOrBang = (DiskDisplayType)_gameState.StarOrBang;
+
+            if (starOrBang == DiskDisplayType.Star)
+            {
+                _gameState.DiskPrinter = new PrintDiskStarService();
+            }
+            else if (starOrBang == DiskDisplayType.Bang)
+            {
+                _gameState.DiskPrinter = new PrintDiskBangService();
+            }
+
+            if (_gameState.UpsideDown == 1)
+            {
+                _gameState.Printer = new PrintBoardNormalService(_gameState.DiskPrinter);
+            }
+            else if (_gameState.UpsideDown == 2)
+            {
+                _gameState.Printer = new PrintBoardReverseService(_gameState.DiskPrinter);
+            }
         }
 
         public void InitGame(object saveGame)
         {
-            throw new NotImplementedException();
+            var test = (JObject)saveGame;
+            var test2 = test.ToObject<GameStatusTowersOfHanoi>();
+            _gameState = test2;            
+            _gameState.StateHasChanged = true;
+            InitPrinter();
         }
+
+        public void PrintGame()
+        {
+            if (!_gameState.StateHasChanged)
+            {
+                return;
+            }
+            Console.Clear();
+            _gameState.Printer.PrintBoard(_gameState.Board);
+            if (_gameState.InvalidInput)
+            {
+                Console.WriteLine("Invalid Input");
+            }
+            if (_gameState.WrongStack)
+            {
+                Console.WriteLine("You can't take from this stack or put a disk there");
+            }
+            _gameState.StateHasChanged = false;            
+        }                
+
+        //takes a disk and returns bool if it was successful
+        private void TakeDisk(int towerIndex)
+        {
+            int counter;            
+            
+            if (_gameState.Board[towerIndex, counter = NextDisk(towerIndex)] == 0)
+            {
+                return;                
+            }
+
+            int removedDiskValue = _gameState.Board[towerIndex, NextDisk(towerIndex)];
+            _gameState.Board[towerIndex, NextDisk(towerIndex)] = 0;
+            _gameState.RemovedDisk = removedDiskValue;            
+        }
+
+        //Drops disk and returns bool whether its alowed or not
+        private void DropDisk(int towerIndex)
+        {
+            if (NextFreeSlot(towerIndex) != _gameState.Board.GetLength(1) - 1)
+            {
+                if (_gameState.RemovedDisk > _gameState.Board[towerIndex, NextFreeSlot(towerIndex) + 1])
+                {
+                    return;
+                }
+            }
+            _gameState.Board[towerIndex, NextFreeSlot(towerIndex)] = _gameState.RemovedDisk;
+            _gameState.RemovedDisk = 0;
+        }        
+
+        private int NextFreeSlot(int towerIndex)
+        {
+            int i;
+            for (i = _gameState.Board.GetLength(1) - 1; i >= 0; i--)
+            {
+                if (_gameState.Board[towerIndex, i] == 0)
+                {
+                    break;
+                }
+            }
+            return i;
+        }
+
+        private int NextDisk(int towerIndex)
+        {
+            int i;
+            for (i = 0; i < _gameState.Board.GetLength(1) - 1; i++)
+            {
+                if (_gameState.Board[towerIndex, i] != 0)
+                {
+                    break;
+                }
+            }
+            return i;
+        }     
+
+        public bool HasEnded()
+        {
+            return _gameState.Board[2, 0] != 0;
+        }
+
+        public void HandleInput(ConsoleKeyInfo consoleKeyInfo)
+        {
+            if (char.IsLetter(consoleKeyInfo.KeyChar))
+            {
+                if (consoleKeyInfo.KeyChar == 's')
+                {
+                    SaveGame saveGame = new SaveGame();
+                    saveGame.SaveToMedium(_gameState);
+                    Console.WriteLine("Game has been saved!");
+                    Environment.Exit(0);
+                }
+            }
+            if (char.IsDigit(consoleKeyInfo.KeyChar))
+            {
+                int dropOrTakeTower = Convert.ToInt32(char.ToString(consoleKeyInfo.KeyChar));
+                if (dropOrTakeTower >= 1 && dropOrTakeTower <= 3)
+                {
+                    if (_gameState.RemovedDisk != 0)
+                    {
+                        DropDisk(dropOrTakeTower - 1);
+                    }
+                    else
+                    {
+                        TakeDisk(dropOrTakeTower - 1);
+                    }
+                }
+            }
+            else _gameState.InvalidInput = true;            
+        }        
     }
 }
