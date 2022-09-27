@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlayConsoleGames.TicTacToe
 {
-    internal class CollorfullStaticBoardPrinter : IBoardPrinter
+    internal class ColorfulStaticBoardPrinter : IBoardPrinter
     {
 
         public void PrintBoard(char[,] arr)

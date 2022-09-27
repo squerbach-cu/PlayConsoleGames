@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PlayConsoleGames.Connect4;
-
-namespace PlayConsoleGames.Tools
+﻿namespace PlayConsoleGames.Tools
 {
     internal class WinValidation
     {
@@ -30,6 +23,7 @@ namespace PlayConsoleGames.Tools
         /// <param name="dropRow"></param>
         /// <param name="winningNumber"></param>
         /// <returns></returns>
+        /// public static maybe?
         public bool CheckWin(char[,] c4array, char activePlayerChar, int dropColumn, int dropRow, int winningNumber )
         {
             int currentColumn = dropColumn;

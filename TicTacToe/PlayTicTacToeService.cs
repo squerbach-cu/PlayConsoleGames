@@ -31,27 +31,20 @@ namespace PlayConsoleGames.TicTacToe
 
         public bool HasEnded()
         {
-            if (_gameState.IsFull)
+            if (_gameState.IsFull || _gameState.IsWon)
             {
                 return true;
-            }
-
-            WinValidation winValidation = new WinValidation();
-
-            int winCount = 3;
-            if (winValidation.CheckWin(_gameState.Board, XOSpace, j, i, winCount))
-            {
-
-            }
-            
-
-            return _gameState.IsWon;
+            } 
+            return false;
         }
 
         public void InitGame()
         {
             _gameState = new GameStatusTicTacToe();
+
+            Console.Write("How do you want your game printed, colorful(1), dynamic(2) or static(3)? ");
             _gameState.PrinterIndex = Convert.ToInt32(Console.ReadLine());
+            _gameState.StateHasChanged = true;
             InitPrinter();
         }
 
@@ -64,55 +57,29 @@ namespace PlayConsoleGames.TicTacToe
             InitPrinter();
         }
 
-        //Gameplay Loop
-        public void PlayGames()
-        {
-             
-            //public static bool CheckWin(char[,] c4array, char activePlayerChar, int dropColumn, int dropRow, int winningNumber)
-            char X = 'X';
-            char O = 'O';
-            char win = '0';
-            
-            
-
-            while (movesCount < 9 && win == '0')
-            {
-                if (playerTurn % 2 == 0)
-                {
-                    win = gameLogic.PutXO(board.Array, X);
-                    Console.Clear();
-                    printer.PrintBoard(board.Array);
-                    movesCount++;
-                }
-                else if (playerTurn % 2 != 0)
-                {
-                    win = gameLogic.PutXO(board.Array, O);
-                    Console.Clear();
-                    printer.PrintBoard(board.Array);
-                    movesCount++;
-                }
-                playerTurn++; 
-            } 
-        }
 
         private void PutXO(int space1To9)
         {
-            char XOSpace = Convert.ToChar(space1To9);
-            int countToNine = 1;
+            int countToNine = 0;
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (countToNine == XOSpace)
+                    if (countToNine == space1To9)
                     {
                         if (_gameState.Board[i, j] != 'X' && _gameState.Board[i, j] != 'O')
                         {
                             _gameState.Board[i, j] = _gameState.GetActivePlayer().Char;
-                            _gameState.SpaceFull = false;                            
+                            _gameState.SpaceIsFull = false;
+                            _gameState.SwitchActivePlayer();
+
+                            WinValidation winValidation = new WinValidation();
+                            int winCount = 3; 
+                            _gameState.IsWon = winValidation.CheckWin(_gameState.Board, _gameState.GetInactivePlayer().Char, j, i, winCount);
                         }
                         else
                         {
-                            _gameState.SpaceFull = true;
+                            _gameState.SpaceIsFull = true;
                             return;
                         } 
                     }
@@ -123,7 +90,26 @@ namespace PlayConsoleGames.TicTacToe
 
         public void PrintGame()
         {
+            if (!_gameState.StateHasChanged)
+            {
+                return;
+            }
+            _gameState.StateHasChanged = false;
+            Console.Clear();
             _gameState.Printer.PrintBoard(_gameState.Board);
+
+            if (_gameState.SpaceIsFull)
+            {
+                Console.WriteLine("You can't put your {0} there. Please try again",_gameState.GetActivePlayer().Char);
+            }
+            if (_gameState.IsFull)
+            {
+                Console.WriteLine("The board is full, no one managed to win");
+            }
+            if (_gameState.IsWon)
+            {
+                Console.WriteLine("The player who put {0}s won the game",_gameState.GetInactivePlayer().Char);
+            }
         }
 
         private void InitPrinter()
@@ -131,7 +117,7 @@ namespace PlayConsoleGames.TicTacToe
             switch (_gameState.PrinterIndex)
             {
                 case 1:
-                    _gameState.Printer = new CollorfullStaticBoardPrinter();
+                    _gameState.Printer = new ColorfulStaticBoardPrinter();
                     break;
                 
                 case 2:

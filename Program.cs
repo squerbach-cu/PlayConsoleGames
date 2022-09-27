@@ -1,9 +1,4 @@
-﻿using System;
-using PlayConsoleGames.Connect4;
-using PlayConsoleGames.PlayTowersOfHanoi;
-using PlayConsoleGames.TicTacToe;
-
-namespace PlayConsoleGames
+﻿namespace PlayConsoleGames
 {
 
     internal class Program

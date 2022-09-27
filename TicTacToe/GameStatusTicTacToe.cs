@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlayConsoleGames.TicTacToe
 {
     internal class GameStatusTicTacToe
     {
+        private bool isFull;
+        private bool spaceIsFull;
+        private char[,] board;
+        private bool isWon;
+
         public GameStatusTicTacToe()
         {
             PlayerOne = new Player
@@ -29,15 +30,47 @@ namespace PlayConsoleGames.TicTacToe
             }
         }
 
-        public bool StateHasChanged { get; set; }
-        public char[,] Board { get; set; }
+        public bool StateHasChanged { get; set; }         
+        public char[,] Board
+        {
+            get => board;
+            set
+            {
+                StateHasChanged = true;
+                board = value;
+            }
+        }
         public Player PlayerOne { get; set; }
         public Player PlayerTwo { get; set; }
-        public bool IsFull { get; set; }
-        public bool IsWon { get; set; }
+        public bool IsWon
+        {
+            get => isWon;
+            set
+            {
+                StateHasChanged = true;
+                isWon = value;
+            }
+        }
         public int PrinterIndex { get; set; }
         public IBoardPrinter Printer { get; set; }
-        public bool SpaceFull { get; internal set; }
+        public bool SpaceIsFull
+        {
+            get => spaceIsFull;
+            set
+            {
+                StateHasChanged = true;
+                spaceIsFull = value;
+            }
+        }
+        public bool IsFull
+        {
+            get => isFull;
+            set
+            {
+                StateHasChanged = true;
+                isFull = value;
+            }
+        }
 
         public Player GetActivePlayer() => PlayerOne.IsActive ? PlayerOne : PlayerTwo;
         public Player GetInactivePlayer() => PlayerOne.IsActive ? PlayerTwo : PlayerOne;       
