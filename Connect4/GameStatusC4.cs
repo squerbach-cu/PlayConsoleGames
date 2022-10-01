@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace PlayConsoleGames.Connect4
 {
+    /// <summary>
+    /// Game State of Connect 4 it stores everything and will be used to save the game as well.
+    /// The Constructor creates two players and creats an Array that serves as the Board
+    /// Some properties have a setter, that also puts changes the StateHasChanged Bool on True so that the Printer only prints the 
+    /// board when something changes, so that there is no flickering on the console.
+    /// </summary>
     internal class GameStatusC4
     {
         private int droppedTokenCounter;
@@ -93,6 +99,7 @@ namespace PlayConsoleGames.Connect4
 
         public Player GetInactivePlayer() => PlayerOne.IsActive ? PlayerTwo : PlayerOne;
 
+        //the same as above => expression body
         //    if (PlayerOne.IsActive)
         //    {
         //        return PlayerOne;

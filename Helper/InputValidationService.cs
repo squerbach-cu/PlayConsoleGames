@@ -1,40 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace PlayConsoleGames.Tools
 {
     internal class InputValidationService
     {
-        public static int InputValidation(string input)
+        /// <summary>
+        /// Gets a string and return a int and a bool if the string contains a numeric value between minVal and maxVal
+        /// </summary>
+        /// <param name="userInput"></param>
+        /// <param name="minVal"></param>
+        /// <param name="maxVal"></param>
+        /// <param name="validInt"></param>
+        /// <returns></returns>
+        public bool ValdiateInt(string userInput, int minVal, int maxVal, out int validInt)
         {
-            int returnnumber = 0;
-
-            while (returnnumber <= 0)
+            if (!int.TryParse(userInput, out validInt))
             {
-                bool erfolg = int.TryParse(input, out returnnumber);
-                if (erfolg)
-                {
-                    if (returnnumber >= 1 && returnnumber <= 9)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Only 1 to 9 are valid inputs");
-                        input = Console.ReadLine();
-                        returnnumber = 0;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Only 1 to 9 are valid inputs");
-                    input = Console.ReadLine();
-                }
+                return false;
             }
-            return returnnumber;
-        }
+            if (int.TryParse(userInput, out validInt))
+            {
+                if (validInt <= maxVal && validInt >= minVal)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }        
     }
 }

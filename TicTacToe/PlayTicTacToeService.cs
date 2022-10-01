@@ -7,6 +7,12 @@ namespace PlayConsoleGames.TicTacToe
     internal class PlayTicTacToeService : IGame
     {
         private GameStatusTicTacToe _gameState;
+        private InputValidationService validationService;
+        private const int WIN_COUNT = 3;
+        public PlayTicTacToeService()
+        {
+            InputValidationService validationService = new InputValidationService();
+        }
         public void HandleInput(ConsoleKeyInfo consoleKeyInfo)
         {
             if (char.IsLetter(consoleKeyInfo.KeyChar))
@@ -40,10 +46,18 @@ namespace PlayConsoleGames.TicTacToe
 
         public void InitGame()
         {
+            Console.Clear();
+            Console.WriteLine("You are now playing the TicTacToe!");
+
             _gameState = new GameStatusTicTacToe();
 
+            int printerIndex;
             Console.Write("How do you want your game printed, colorful(1), dynamic(2) or static(3)? ");
-            _gameState.PrinterIndex = Convert.ToInt32(Console.ReadLine());
+            while (!validationService.ValdiateInt(Console.ReadLine(), 1, 3, out printerIndex))
+            {
+                Console.Write("Enter 1,2 or 3: ");
+            }
+            _gameState.PrinterIndex = printerIndex;
             _gameState.StateHasChanged = true;
             InitPrinter();
         }
@@ -72,10 +86,10 @@ namespace PlayConsoleGames.TicTacToe
                             _gameState.Board[i, j] = _gameState.GetActivePlayer().Char;
                             _gameState.SpaceIsFull = false;
                             _gameState.SwitchActivePlayer();
-
-                            WinValidation winValidation = new WinValidation();
-                            int winCount = 3; 
-                            _gameState.IsWon = winValidation.CheckWin(_gameState.Board, _gameState.GetInactivePlayer().Char, j, i, winCount);
+                            
+                            WinValidation winValidation = new WinValidation(WIN_COUNT);
+                             
+                            _gameState.IsWon = winValidation.CheckWin(_gameState.Board, _gameState.GetInactivePlayer().Char, j, i);
                         }
                         else
                         {

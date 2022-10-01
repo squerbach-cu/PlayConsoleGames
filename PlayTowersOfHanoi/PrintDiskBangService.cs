@@ -2,9 +2,10 @@
 {
     public class PrintDiskBangService : IPrintDiskService
     {
+        //<inheritdoc>        
         public string GenerateVisualDisk(int diskMaxAmount, int diskToPrint)
         {
-
+            
             string outputString = diskToPrint.ToString();
             const string diskBroadnessVisual = "!";
             const string diskBroadnessVisual2 = " ";

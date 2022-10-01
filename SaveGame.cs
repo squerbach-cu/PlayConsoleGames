@@ -21,7 +21,7 @@ namespace PlayConsoleGames
             var dir = Environment.CurrentDirectory;            
             File.WriteAllText(dir + "\\Savegame.json", stringToSave);             
         }
-
+        
         public object LoadFromMedium()
         {
             //Get the file to load from
@@ -49,8 +49,8 @@ namespace PlayConsoleGames
             var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
-               
 
+        //gets the name in the safegame and "maps" it the gameIndex, that is used to get the corresponding object in the GameEngine
         public int GetGameIndex()
         {
             var dir = Environment.CurrentDirectory;
@@ -69,7 +69,7 @@ namespace PlayConsoleGames
                 case "GameStatusTicTacToe":
                     return 3;                
             }
-            return 0;
+            return 0;            
         }
     }
 }

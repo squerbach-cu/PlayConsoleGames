@@ -4,6 +4,7 @@ namespace PlayConsoleGames.PlayTowersOfHanoi
 {
     public class PrintBoardNormalService : IPrintBoardService
     {
+
         private IPrintDiskService _printDiskService;
 
         public PrintBoardNormalService(IPrintDiskService printDiskService)

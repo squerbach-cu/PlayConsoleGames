@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using PlayConsoleGames.Tools;
 using System;
 
 namespace PlayConsoleGames.PlayTowersOfHanoi
@@ -8,20 +9,40 @@ namespace PlayConsoleGames.PlayTowersOfHanoi
         private GameStatusTowersOfHanoi _gameState;
         public void InitGame()
         {
-            Console.Write("Disk amount: ");
-            int diskAmount = Convert.ToInt32(Console.ReadLine());
+            Console .Clear();
+            Console.WriteLine("You are now playing the Towers Of Hanoi!");
 
+            InputValidationService validationService = new InputValidationService();
+
+            Console.Write("Disk amount: ");
+            int diskAmount;
+            while (!validationService.ValdiateInt(Console.ReadLine(), 1, Int32.MaxValue, out diskAmount))
+            {
+                Console.Write("Enter a number: ");
+            }
             _gameState = new GameStatusTowersOfHanoi(diskAmount);
             _gameState.DiskAmount = diskAmount;
 
-            Console.Write("Print the towers normal(1) or upside down?(2)? ");
-            _gameState.UpsideDown = Convert.ToInt32(Console.ReadLine());
 
-            Console.Write("Print the towers with stars(1) or bangs(2)? ");
-            _gameState.StarOrBang = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Print the towers normal(1) or upside down?(2)? ");
+            int upsideDown;
+            while (!validationService.ValdiateInt(Console.ReadLine(), 1, 2, out upsideDown))
+            {
+                Console.Write("Enter 1 or 2: ");
+            }
+            _gameState.UpsideDown = upsideDown;
+
+
+            Console.Write("Print the towers with stars(1) or bangs?(2)? ");
+            int starsBangs;
+            while (!validationService.ValdiateInt(Console.ReadLine(), 1, 2, out starsBangs))
+            {
+                Console.Write("Enter 1 or 2: ");
+            }
+            _gameState.StarOrBang = starsBangs;
 
             InitPrinter();
-        }
+        }        
 
         private void InitPrinter()
         {
@@ -63,6 +84,7 @@ namespace PlayConsoleGames.PlayTowersOfHanoi
             }
             Console.Clear();
             _gameState.Printer.PrintBoard(_gameState.Board);
+            Console.WriteLine("1      2      3");
             if (_gameState.InvalidInput)
             {
                 Console.WriteLine("Invalid Input");
@@ -159,6 +181,7 @@ namespace PlayConsoleGames.PlayTowersOfHanoi
                     {
                         TakeDisk(dropOrTakeTower - 1);
                     }
+                    _gameState.InvalidInput = false;
                 }
             }
             else _gameState.InvalidInput = true;            

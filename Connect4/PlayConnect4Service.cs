@@ -4,9 +4,17 @@ using System;
 
 namespace PlayConsoleGames.Connect4
 {
+    ///<inheritdoc /> 
     public class PlayConnect4Service : IGame
     {
+        private readonly WinValidation _winValidation;
+        public PlayConnect4Service()
+        {
+            _winValidation = new WinValidation(WIN_COUNT);
+        }
         private GameStatusC4 _gameState;
+        private const int WIN_COUNT = 4;
+        
         
         public void PrintGame()
         {
@@ -51,13 +59,13 @@ namespace PlayConsoleGames.Connect4
 
         public bool HasEnded()
         {
-            WinValidation winValidation = new WinValidation();
+            
             if (_gameState.DroppedTokenCounter == 42)
             {
                 _gameState.IsBoardFull = true;                
                 return true;
             }
-            else if (winValidation.CheckWin(_gameState.Board, _gameState.GetInactivePlayer().Char, _gameState.LastDropColumn, _gameState.LastDropRow, 4))
+            else if (_winValidation.CheckWin(_gameState.Board, _gameState.GetInactivePlayer().Char, _gameState.LastDropColumn, _gameState.LastDropRow))
             {
                 _gameState.IsGameWon = true;                
                 return true;
@@ -78,6 +86,9 @@ namespace PlayConsoleGames.Connect4
 
         public void InitGame()
         {
+            Console.Clear();
+            Console.WriteLine("You are now playing the Connect Four!");
+
             _gameState = new GameStatusC4();            
 
             Console.Write("Enter name of player ONE: ");
@@ -111,8 +122,8 @@ namespace PlayConsoleGames.Connect4
             
         }
 
-        //asks where to drop a token and then changes THE array with the char of the active player
-        //if the stack is full the drop methode is called recursive
+        //asks where to drop a token and then changes the _gameState array with the char of the active player
+        //if the stack is full nothing changes and the game will return to the GameEngine and wait for another user input
         private void DropToken(int dropColumn)
         {
             if (IsFull(dropColumn))

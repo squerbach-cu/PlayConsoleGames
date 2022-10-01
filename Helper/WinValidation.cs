@@ -2,6 +2,24 @@
 {
     internal class WinValidation
     {
+        private readonly int _winningNumber;
+
+        public WinValidation(int winningNumber)
+        {
+            /// <summary>
+            /// In connect4 the winning number is four and in tic tac toe its 3 
+            /// </summary>
+            _winningNumber = winningNumber;
+        }
+
+        /// <summary>
+        /// Checks whether or not the next slot that is about to be cheked is in the bounds of the array.
+        /// </summary>
+        /// <param name="c4array"></param>
+        /// <param name="dropRow"></param>
+        /// <param name="dropColum"></param>
+        /// <returns></returns>
+        /// 
         private static bool InsideArray(char[,] c4array, int dropRow, int dropColum)
         {
 
@@ -20,18 +38,17 @@
         /// <param name="c4array"></param>
         /// <param name="activePlayerChar"></param>
         /// <param name="dropColumn"></param>
-        /// <param name="dropRow"></param>
-        /// <param name="winningNumber"></param>
+        /// <param name="dropRow"></param>        
         /// <returns></returns>
-        /// public static maybe?
-        public bool CheckWin(char[,] c4array, char activePlayerChar, int dropColumn, int dropRow, int winningNumber )
+        
+        public bool CheckWin(char[,] c4array, char activePlayerChar, int dropColumn, int dropRow)
         {
             int currentColumn = dropColumn;
             int currentRow = dropRow;
             int counter = 1;
 
             //horizontal
-            while (counter < winningNumber)
+            while (counter < _winningNumber)
             {
                 currentColumn++;
                 if (InsideArray(c4array, currentRow, currentColumn) && c4array[currentRow, currentColumn] == activePlayerChar)
@@ -44,9 +61,10 @@
                 }
             }
 
+            //return the dropColumn back to the currentColumn so that the other horizontal direction can be checked 
             currentColumn = dropColumn;
 
-            while (counter < winningNumber)
+            while (counter < _winningNumber)
             {
                 currentColumn--;
                 if (InsideArray(c4array, currentRow, currentColumn) && c4array[currentRow, currentColumn] == activePlayerChar)
@@ -59,7 +77,7 @@
                 }
             }
 
-            if (counter == winningNumber)
+            if (counter == _winningNumber)
             {
                 return true;
             }
@@ -67,7 +85,7 @@
             counter = 1;
 
             //vertikal 
-            while (counter < winningNumber)
+            while (counter < _winningNumber)
             {
                 currentRow--;
                 if (InsideArray(c4array, currentRow, currentColumn) && c4array[currentRow, currentColumn] == activePlayerChar)
@@ -81,14 +99,14 @@
             }
             currentRow = dropRow;
 
-            if (counter == winningNumber)
+            if (counter == _winningNumber)
             {
                 return true;
             }
             currentRow = dropRow;
             counter = 1;
 
-            while (counter < winningNumber)
+            while (counter < _winningNumber)
             {
                 currentRow++;
                 if (InsideArray(c4array, currentRow, currentColumn) && c4array[currentRow, currentColumn] == activePlayerChar)
@@ -101,7 +119,7 @@
                 }
             }
 
-            if (counter == winningNumber)
+            if (counter == _winningNumber)
             {
                 return true;
             }
@@ -109,7 +127,7 @@
             counter = 1;
 
             //diagonal
-            while (counter < winningNumber)
+            while (counter < _winningNumber)
             {
                 currentRow++;
                 currentColumn++;
@@ -126,7 +144,7 @@
             currentColumn = dropColumn;
             currentRow = dropRow;
 
-            while (counter < winningNumber)
+            while (counter < _winningNumber)
             {
                 currentRow--;
                 currentColumn--;
@@ -140,11 +158,12 @@
                 }
             }
 
-            if (counter == winningNumber)
+            if (counter == _winningNumber)
             {
                 return true;
             }
 
+            //diagonal but the other direction
             currentColumn = dropColumn;
             currentRow = dropRow;
             counter = 1;
