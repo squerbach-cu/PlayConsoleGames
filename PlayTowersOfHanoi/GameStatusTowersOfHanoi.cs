@@ -5,7 +5,7 @@
         private int removedDisk;
         /// <summary>
         /// Object that saves all relevant information about the game 
-        /// get initialiesed with the amount of disks the player enters
+        /// gets initialiesed with the amount of disks the player enters
         /// </summary>
         /// <param name="diskAmount"></param>
         public GameStatusTowersOfHanoi(int diskAmount)

@@ -23,9 +23,5 @@ namespace PlayConsoleGames.PlayTowersOfHanoi
                 Console.WriteLine();
             }
         }
-
-
-
-
     }
 }

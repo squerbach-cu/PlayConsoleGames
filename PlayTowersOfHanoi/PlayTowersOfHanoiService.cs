@@ -83,8 +83,7 @@ namespace PlayConsoleGames.PlayTowersOfHanoi
                 return;
             }
             Console.Clear();
-            _gameState.Printer.PrintBoard(_gameState.Board);
-            Console.WriteLine("1      2      3");
+            _gameState.Printer.PrintBoard(_gameState.Board);            
             if (_gameState.InvalidInput)
             {
                 Console.WriteLine("Invalid Input");

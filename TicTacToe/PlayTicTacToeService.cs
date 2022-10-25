@@ -7,12 +7,9 @@ namespace PlayConsoleGames.TicTacToe
     internal class PlayTicTacToeService : IGame
     {
         private GameStatusTicTacToe _gameState;
-        private InputValidationService validationService;
-        private const int WIN_COUNT = 3;
-        public PlayTicTacToeService()
-        {
-            InputValidationService validationService = new InputValidationService();
-        }
+        private InputValidationService _validationService;
+        private const int WIN_COUNT = 3;        
+
         public void HandleInput(ConsoleKeyInfo consoleKeyInfo)
         {
             if (char.IsLetter(consoleKeyInfo.KeyChar))
@@ -46,14 +43,15 @@ namespace PlayConsoleGames.TicTacToe
 
         public void InitGame()
         {
+            
             Console.Clear();
             Console.WriteLine("You are now playing the TicTacToe!");
-
+            _validationService = new InputValidationService();
             _gameState = new GameStatusTicTacToe();
 
             int printerIndex;
             Console.Write("How do you want your game printed, colorful(1), dynamic(2) or static(3)? ");
-            while (!validationService.ValdiateInt(Console.ReadLine(), 1, 3, out printerIndex))
+            while (!_validationService.ValdiateInt(Console.ReadLine(), 1, 3, out printerIndex))
             {
                 Console.Write("Enter 1,2 or 3: ");
             }

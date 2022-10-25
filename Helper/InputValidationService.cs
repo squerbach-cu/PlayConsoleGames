@@ -6,7 +6,7 @@ namespace PlayConsoleGames.Tools
     internal class InputValidationService
     {
         /// <summary>
-        /// Gets a string and return a int and a bool if the string contains a numeric value between minVal and maxVal
+        /// Gets a string and returns a int and a bool if the string contains a numeric value between minVal and maxVal
         /// </summary>
         /// <param name="userInput"></param>
         /// <param name="minVal"></param>
